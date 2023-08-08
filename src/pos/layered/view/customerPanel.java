@@ -4,17 +4,24 @@
  */
 package pos.layered.view;
 
+import javax.swing.JOptionPane;
+import pos.layered.dto.CustomerDto;
+import pos.layered.controller.CustomerController;
+
 /**
  *
  * @author Ravidu Ayeshmanth
  */
 public class customerPanel extends javax.swing.JPanel {
+    
+    CustomerController customerController;
 
     /**
      * Creates new form customerPanel
      */
     public customerPanel() {
         initComponents();
+        customerController = new CustomerController();
     }
 
     /**
@@ -288,7 +295,7 @@ public class customerPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        
+        addCustomer();
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
@@ -334,4 +341,20 @@ public class customerPanel extends javax.swing.JPanel {
     private javax.swing.JPanel tablePanel;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
+
+    private void addCustomer() {
+        CustomerDto customerDto = new CustomerDto(
+                custIdText.getText(),
+                custTitleText.getText(), 
+                custNameText.getText(), 
+                custDobText.getText(), 
+                Double.valueOf(custSalaryText.getText()), 
+                custAddressText.getText(), 
+                custCityText.getText(),
+                custProvinceText.getText(),
+                custProvinceText.getText());
+        
+        String resp = customerController.addCustomer(customerDto);
+        JOptionPane.showMessageDialog(this, resp);
+    }
 }

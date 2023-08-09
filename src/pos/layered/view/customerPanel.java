@@ -4,6 +4,8 @@
  */
 package pos.layered.view;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import pos.layered.dto.CustomerDto;
 import pos.layered.controller.CustomerController;
@@ -13,7 +15,7 @@ import pos.layered.controller.CustomerController;
  * @author Ravidu Ayeshmanth
  */
 public class customerPanel extends javax.swing.JPanel {
-    
+
     CustomerController customerController;
 
     /**
@@ -295,19 +297,23 @@ public class customerPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        addCustomer();
+        try {
+            addCustomer();
+        } catch (Exception ex) {
+            Logger.getLogger(customerPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-       
+
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        
+
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void customerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerTableMouseClicked
-        
+
     }//GEN-LAST:event_customerTableMouseClicked
 
 
@@ -342,18 +348,18 @@ public class customerPanel extends javax.swing.JPanel {
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 
-    private void addCustomer() {
+    private void addCustomer() throws Exception {
         CustomerDto customerDto = new CustomerDto(
                 custIdText.getText(),
-                custTitleText.getText(), 
-                custNameText.getText(), 
-                custDobText.getText(), 
-                Double.valueOf(custSalaryText.getText()), 
-                custAddressText.getText(), 
+                custTitleText.getText(),
+                custNameText.getText(),
+                custDobText.getText(),
+                Double.valueOf(custSalaryText.getText()),
+                custAddressText.getText(),
                 custCityText.getText(),
                 custProvinceText.getText(),
                 custProvinceText.getText());
-        
+
         String resp = customerController.addCustomer(customerDto);
         JOptionPane.showMessageDialog(this, resp);
     }

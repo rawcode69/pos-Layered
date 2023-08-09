@@ -26,7 +26,7 @@ public class ServiceFactory {
 
     public SuperSerivce getSerivce(ServiceType type) {
         switch (type) {
-            case Customer:
+            case CUSTOMER:
                 return new CustomerSeriviceImpl();
 
             default:
@@ -35,6 +35,6 @@ public class ServiceFactory {
     }
 
     public enum ServiceType {
-        Customer
+        CUSTOMER
     }
 }

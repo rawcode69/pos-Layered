@@ -4,9 +4,12 @@
  */
 package pos.layered.view;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import pos.layered.dto.CustomerDto;
 import pos.layered.controller.CustomerController;
 
@@ -21,9 +24,11 @@ public class customerPanel extends javax.swing.JPanel {
     /**
      * Creates new form customerPanel
      */
-    public customerPanel() {
-        initComponents();
+    public customerPanel() throws Exception {
         customerController = new CustomerController();
+        initComponents();
+        loadAllCustomers();
+        
     }
 
     /**
@@ -305,15 +310,27 @@ public class customerPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-
+        try {
+            updateCustomer();
+        } catch (Exception ex) {
+            Logger.getLogger(customerPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-
+        try {
+            deleteCustomer();
+        } catch (Exception ex) {
+            Logger.getLogger(customerPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void customerTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_customerTableMouseClicked
-
+        try {
+            searchCustomer();
+        } catch (Exception ex) {
+            Logger.getLogger(customerPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_customerTableMouseClicked
 
 
@@ -362,5 +379,82 @@ public class customerPanel extends javax.swing.JPanel {
 
         String resp = customerController.addCustomer(customerDto);
         JOptionPane.showMessageDialog(this, resp);
+        clear();
+        loadAllCustomers();
     }
+
+    private void clear() {
+
+        custIdText.setText("");
+        custTitleText.setText("");
+        custNameText.setText("");
+        custDobText.setText("");
+        custSalaryText.setText("");
+        custAddressText.setText("");
+        custCityText.setText("");
+        custProvinceText.setText("");
+        custZipText.setText("");
+    }
+    
+    private void loadAllCustomers() throws Exception {
+
+        String[] collumns = {"Id", "Name", "Address", "Salary", "Postal Code"};
+        DefaultTableModel dtm = new DefaultTableModel(collumns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        customerTable.setModel(dtm);
+        ArrayList<CustomerDto> customers = customerController.getAllCustomers();
+        for (CustomerDto customer : customers) {
+            Object[] rowData = {customer.getId(), customer.getTitle() + " " + customer.getName(), customer.getAddress() + ", " + customer.getCity(), customer.getSalary(), customer.getZip()};
+            dtm.addRow(rowData);
+        }
+    }
+
+    private void updateCustomer() throws Exception{
+       CustomerDto customerDto = new CustomerDto(
+                custIdText.getText(),
+                custTitleText.getText(),
+                custNameText.getText(),
+                custDobText.getText(),
+                Double.valueOf(custSalaryText.getText()),
+                custAddressText.getText(),
+                custCityText.getText(),
+                custProvinceText.getText(),
+                custProvinceText.getText());
+
+        String resp = customerController.updateCustomer(customerDto);
+        JOptionPane.showMessageDialog(this, resp);
+        clear();
+        loadAllCustomers();
+    }
+
+    private void deleteCustomer() throws  Exception{
+        String id = custIdText.getText();
+        String resp = customerController.deleteCutsomer(id);
+        JOptionPane.showMessageDialog(this, resp);
+        clear();
+        loadAllCustomers();
+    }
+    
+    private void searchCustomer() throws Exception{
+        String custId = customerTable.getValueAt(customerTable.getSelectedRow(), 0).toString();
+        CustomerDto customerModel = customerController.getCustomer(custId);
+        if (customerModel != null) {
+            custIdText.setText(customerModel.getId());
+            custTitleText.setText(customerModel.getTitle());
+            custNameText.setText(customerModel.getName());
+            custDobText.setText(customerModel.getDob());
+            custSalaryText.setText(Double.toString(customerModel.getSalary()));
+            custAddressText.setText(customerModel.getAddress());
+            custCityText.setText(customerModel.getCity());
+            custProvinceText.setText(customerModel.getProvince());
+            custZipText.setText(customerModel.getZip());
+        } else {
+            JOptionPane.showMessageDialog(this, "Customer Not Found");
+        }
+    }
+
 }

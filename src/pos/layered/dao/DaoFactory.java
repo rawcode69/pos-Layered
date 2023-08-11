@@ -5,6 +5,7 @@
 package pos.layered.dao;
 
 import pos.layered.dao.custom.impl.CustomerDaoImpl;
+import pos.layered.dao.custom.impl.ItemDaoImpl;
 
 /**
  *
@@ -30,6 +31,8 @@ public class DaoFactory {
         switch (daoTypes) {
             case CUSTOMER:
                 return new CustomerDaoImpl();
+            case ITEM:
+                return new ItemDaoImpl();
 
             default:
                 return null;
@@ -38,7 +41,7 @@ public class DaoFactory {
 
     public enum DaoTypes {
 
-        CUSTOMER
+        CUSTOMER, ITEM
     }
 
 }

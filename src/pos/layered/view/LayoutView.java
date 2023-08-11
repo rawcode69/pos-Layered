@@ -4,6 +4,9 @@
  */
 package pos.layered.view;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Ravidu Ayeshmanth
@@ -30,7 +33,7 @@ public class LayoutView extends javax.swing.JFrame {
         headingPanel = new javax.swing.JPanel();
         headingLabel = new javax.swing.JLabel();
         navigatioPanel = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        itemButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         customerButton = new javax.swing.JButton();
         bodyPanel = new javax.swing.JPanel();
@@ -57,8 +60,13 @@ public class LayoutView extends javax.swing.JFrame {
 
         navigatioPanel.setBackground(new java.awt.Color(255, 204, 204));
 
-        jButton1.setBackground(new java.awt.Color(255, 102, 102));
-        jButton1.setText("jButton1");
+        itemButton.setBackground(new java.awt.Color(255, 102, 102));
+        itemButton.setText("Manage Item");
+        itemButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemButtonActionPerformed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(255, 102, 102));
         jButton2.setText("jButton1");
@@ -78,7 +86,7 @@ public class LayoutView extends javax.swing.JFrame {
             .addGroup(navigatioPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(navigatioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(itemButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(navigatioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,7 +99,7 @@ public class LayoutView extends javax.swing.JFrame {
             navigatioPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(navigatioPanelLayout.createSequentialGroup()
                 .addGap(85, 85, 85)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(itemButton, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(238, Short.MAX_VALUE))
@@ -154,14 +162,28 @@ public class LayoutView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void customerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerButtonActionPerformed
-        // TODO add your handling code here:
-        customerPanel cPanel = new customerPanel();
+        try {
+            // TODO add your handling code here:
+            customerPanel cPanel = new customerPanel();
+            bodyPanel.removeAll();
+            cPanel.setSize(bodyPanel.getWidth(), bodyPanel.getHeight());
+            bodyPanel.add(cPanel);
+            bodyPanel.repaint();
+            bodyPanel.revalidate();
+        } catch (Exception ex) {
+            Logger.getLogger(LayoutView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_customerButtonActionPerformed
+
+    private void itemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemButtonActionPerformed
+        itemPanel iPanel = new itemPanel();
         bodyPanel.removeAll();
-        cPanel.setSize(bodyPanel.getWidth(), bodyPanel.getHeight());
-        bodyPanel.add(cPanel);
+        iPanel.setSize(bodyPanel.getWidth(), bodyPanel.getHeight());
+        bodyPanel.add(iPanel);
         bodyPanel.repaint();
         bodyPanel.revalidate();
-    }//GEN-LAST:event_customerButtonActionPerformed
+        
+    }//GEN-LAST:event_itemButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -204,7 +226,7 @@ public class LayoutView extends javax.swing.JFrame {
     private javax.swing.JButton customerButton;
     private javax.swing.JLabel headingLabel;
     private javax.swing.JPanel headingPanel;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton itemButton;
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel navigatioPanel;
     // End of variables declaration//GEN-END:variables

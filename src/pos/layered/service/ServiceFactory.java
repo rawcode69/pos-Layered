@@ -5,6 +5,7 @@
 package pos.layered.service;
 
 import pos.layered.service.custom.impl.CustomerSeriviceImpl;
+import pos.layered.service.custom.impl.ItemServiceImpl;
 
 /**
  *
@@ -29,12 +30,14 @@ public class ServiceFactory {
             case CUSTOMER:
                 return new CustomerSeriviceImpl();
 
+            case ITEM:
+                return new ItemServiceImpl();
             default:
                 throw new AssertionError();
         }
     }
 
     public enum ServiceType {
-        CUSTOMER
+        CUSTOMER, ITEM
     }
 }

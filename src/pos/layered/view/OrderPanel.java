@@ -12,18 +12,21 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import pos.layered.controller.CustomerController;
 import pos.layered.controller.ItemController;
+import pos.layered.controller.OrderController;
 import pos.layered.dto.CustomerDto;
 import pos.layered.dto.ItemDto;
 import pos.layered.dto.OrderDetailDto;
+import pos.layered.dto.OrderDto;
 
 /**
  *
  * @author Ravidu Ayeshmanth
  */
 public class OrderPanel extends javax.swing.JPanel {
-    
+
     CustomerController customerController;
     ItemController itemController;
+    OrderController orderController;
     private List<OrderDetailDto> orderDetails = new ArrayList<>();
 
     /**
@@ -32,9 +35,10 @@ public class OrderPanel extends javax.swing.JPanel {
     public OrderPanel() {
         customerController = new CustomerController();
         itemController = new ItemController();
+        orderController = new OrderController();
         initComponents();
         loadTable();
-        
+
     }
 
     /**
@@ -202,13 +206,14 @@ public class OrderPanel extends javax.swing.JPanel {
                         .addComponent(itemText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(itemSearchButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(formPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(qtyLabel)
-                    .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(formPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(formPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(discountLabel)
                         .addComponent(discountText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(addItemButton)))
+                        .addComponent(addItemButton))
+                    .addGroup(formPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(qtyLabel)
+                        .addComponent(qtyText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(14, 14, 14))
         );
 
@@ -345,32 +350,32 @@ public class OrderPanel extends javax.swing.JPanel {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-            
+
         };
-        
+
         orderTable.setModel(dtm);
     }
-    
+
     private void addToTable() {
-        
+
         OrderDetailDto orderDetail = new OrderDetailDto(
-                orderIdText.getText(),
+                itemText.getText(),
                 Integer.valueOf(qtyText.getText()),
                 Double.valueOf(discountText.getText()));
         orderDetails.add(orderDetail);
-        
+
         DefaultTableModel dtm = (DefaultTableModel) orderTable.getModel();
-        
-        Object [] rowData = {itemText.getText(),Integer.valueOf(qtyText.getText()),Double.valueOf(discountText.getText())};
+
+        Object[] rowData = {itemText.getText(), Integer.valueOf(qtyText.getText()), Double.valueOf(discountText.getText())};
         dtm.addRow(rowData);
-        
+
     }
-    
+
     private void searchCustomer() {
         try {
             String custID = customerText.getText();
             CustomerDto customer = customerController.getCustomer(custID);
-            
+
             if (customer != null) {
                 customerViewLabel.setText(customer.getName());
             } else {
@@ -381,13 +386,13 @@ public class OrderPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, ex);
         }
     }
-    
+
     private void searchItem() {
-        
+
         try {
             String itemCode = itemText.getText();
             ItemDto item = itemController.getItem(itemCode);
-            
+
             if (item != null) {
                 itemViewLabel.setText(item.getDescripitoin() + ", " + item.getPackSize());
             } else {
@@ -397,10 +402,19 @@ public class OrderPanel extends javax.swing.JPanel {
             Logger.getLogger(OrderPanel.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, ex);
         }
-        
+
     }
-    
+
     private void placeOrder() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        try {
+            OrderDto orderDto = new OrderDto(orderIdText.getText(), customerText.getText()    , orderDetails);
+            String resp = orderController.placeOrder(orderDto);
+            JOptionPane.showMessageDialog(this, resp);
+        } catch (Exception ex) {
+            Logger.getLogger(OrderPanel.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex);
+        }
+        
     }
 }

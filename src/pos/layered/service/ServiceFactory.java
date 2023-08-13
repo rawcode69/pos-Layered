@@ -6,6 +6,7 @@ package pos.layered.service;
 
 import pos.layered.service.custom.impl.CustomerSeriviceImpl;
 import pos.layered.service.custom.impl.ItemServiceImpl;
+import pos.layered.service.custom.impl.OrderServiceImpl;
 
 /**
  *
@@ -32,12 +33,16 @@ public class ServiceFactory {
 
             case ITEM:
                 return new ItemServiceImpl();
+
+            case ORDER:
+                return new OrderServiceImpl();
+
             default:
-                throw new AssertionError();
+                return null;
         }
     }
 
     public enum ServiceType {
-        CUSTOMER, ITEM
+        CUSTOMER, ITEM, ORDER
     }
 }
